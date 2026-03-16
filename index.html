@@ -33,15 +33,6 @@ h1 {
   margin-top: 0;
 }
 
-input {
-  padding: 10px;
-  margin: 8px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  width: 80%;
-  text-align: center;
-}
-
 .buttons {
   margin-top: 25px;
   position: relative;
@@ -102,9 +93,7 @@ button {
 
   <h1>Important Question 💖</h1>
 
-  <input id="yourName" placeholder="Your Name">
-  <input id="herName" placeholder="Her Name">
-
+  <!-- 💖 HARD-CODED NAMES -->
   <h2 id="question">Will you be mine forever? 💕</h2>
 
   <div class="buttons">
@@ -132,6 +121,10 @@ const result = document.getElementById("result");
 const fill = document.getElementById("fill");
 const music = document.getElementById("music");
 
+// 💖 CHANGE THESE NAMES
+const yourName = "YourName";
+const herName = "HerName";
+
 let meter = 0;
 
 // Start music on first interaction
@@ -140,10 +133,8 @@ document.body.addEventListener("click", () => {
 }, { once: true });
 
 yesBtn.onclick = () => {
-  const yourName = document.getElementById("yourName").value || "Me";
-  const herName = document.getElementById("herName").value || "You";
-
-  result.innerHTML = `YAYYY 💕<br>Namritha, you just made KKrish the happiest person alive 🥰`;
+  result.innerHTML =
+    `YAYYY 💕<br>Namritha, you just made Kkrish the happiest person alive 🥰`;
   createHearts();
 };
 
