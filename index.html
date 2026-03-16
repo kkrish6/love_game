@@ -23,7 +23,7 @@ body {
   border-radius: 25px;
   text-align: center;
   box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  max-width: 400px;
+  max-width: 420px;
   width: 90%;
   position: relative;
 }
@@ -33,10 +33,19 @@ h1 {
   margin-top: 0;
 }
 
+input {
+  padding: 10px;
+  margin: 8px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  width: 80%;
+  text-align: center;
+}
+
 .buttons {
-  margin-top: 30px;
+  margin-top: 25px;
   position: relative;
-  height: 120px;
+  height: 140px;
 }
 
 button {
@@ -52,13 +61,31 @@ button {
 #yesBtn {
   background: #ff4b7d;
   color: white;
-  left: 20%;
+  left: 15%;
 }
 
 #noBtn {
   background: #ccc;
   color: #333;
-  right: 20%;
+  right: 15%;
+}
+
+#meterBox {
+  margin-top: 15px;
+}
+
+#meter {
+  height: 12px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#fill {
+  height: 100%;
+  width: 0%;
+  background: #ff4b7d;
+  transition: 0.3s;
 }
 
 #result {
@@ -72,44 +99,78 @@ button {
 <body>
 
 <div class="card">
-  <h1>Will you be mine forever? 💖</h1>
+
+  <h1>Important Question 💖</h1>
+
+  <input id="yourName" placeholder="Your Name">
+  <input id="herName" placeholder="Her Name">
+
+  <h2 id="question">Will you be mine forever? 💕</h2>
 
   <div class="buttons">
     <button id="yesBtn">YES ❤️</button>
     <button id="noBtn">NO 😢</button>
   </div>
 
+  <div id="meterBox">
+    Love Meter 💗
+    <div id="meter"><div id="fill"></div></div>
+  </div>
+
   <div id="result"></div>
+
 </div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9c4d7d2f50.mp3?filename=romantic-ambient-piano-110624.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const result = document.getElementById("result");
+const fill = document.getElementById("fill");
+const music = document.getElementById("music");
 
-yesBtn.addEventListener("click", () => {
-  result.innerHTML = "YAYYY 💕 I knew it!!! 🥰";
+let meter = 0;
+
+// Start music on first interaction
+document.body.addEventListener("click", () => {
+  music.play().catch(()=>{});
+}, { once: true });
+
+yesBtn.onclick = () => {
+  const yourName = document.getElementById("yourName").value || "Me";
+  const herName = document.getElementById("herName").value || "You";
+
+  result.innerHTML = `YAYYY 💕<br>${herName}, you just made ${yourName} the happiest person alive 🥰`;
   createHearts();
-});
+};
 
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("click", moveButton);
+noBtn.addEventListener("mouseover", escape);
+noBtn.addEventListener("click", escape);
+noBtn.addEventListener("touchstart", escape);
 
-function moveButton() {
+function escape() {
+  if (navigator.vibrate) navigator.vibrate(120);
+
+  meter += 10;
+  fill.style.width = meter + "%";
+
   const card = document.querySelector(".card");
 
-  const maxX = card.clientWidth - noBtn.offsetWidth - 20;
-  const maxY = card.clientHeight - noBtn.offsetHeight - 20;
+  const maxX = card.clientWidth - noBtn.offsetWidth;
+  const maxY = card.clientHeight - noBtn.offsetHeight;
 
-  const newX = Math.random() * maxX;
-  const newY = Math.random() * maxY;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-  noBtn.style.left = newX + "px";
-  noBtn.style.top = newY + "px";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
 }
 
 function createHearts() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     const heart = document.createElement("div");
     heart.innerHTML = "💖";
     heart.style.position = "fixed";
@@ -118,7 +179,6 @@ function createHearts() {
     heart.style.fontSize = "24px";
     heart.style.animation = "float 2s linear forwards";
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 2000);
   }
 }
